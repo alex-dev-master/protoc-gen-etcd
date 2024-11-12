@@ -4,7 +4,7 @@ package proto;
 
 import "google/protobuf/descriptor.proto";
 
-option go_package = "github.com/alex-dev-master/protoc-gen-etcd/internal/proto;proto";
+option go_package = "github.com/alex-dev-master/protoc-gen-etcd/pkg/proto;proto";
 
 // Расширения для хранения etcd ключей
 extend google.protobuf.MessageOptions {

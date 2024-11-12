@@ -7,7 +7,7 @@
 package proto
 
 import (
-	_ "github.com/alex-dev-master/protoc-gen-etcd/internal/proto"
+	_ "github.com/alex-dev-master/protoc-gen-etcd/pkg/proto"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"

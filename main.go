@@ -1,7 +1,7 @@
 package main
 
 import (
-	ipb "github.com/alex-dev-master/protoc-gen-etcd/internal/proto"
+	ipb "github.com/alex-dev-master/protoc-gen-etcd/pkg/proto"
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/descriptorpb"

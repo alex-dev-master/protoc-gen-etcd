@@ -2,7 +2,11 @@ module github.com/alex-dev-master/protoc-gen-etcd/example
 
 go 1.23.0
 
-require google.golang.org/protobuf v1.35.1
+require (
+	github.com/alex-dev-master/protoc-gen-etcd/pkg/proto v0.0.0-00010101000000-000000000000
+	go.etcd.io/etcd/client/v3 v3.5.17
+	google.golang.org/protobuf v1.35.1
+)
 
 require (
 	github.com/coreos/go-semver v0.3.0 // indirect
@@ -11,7 +15,6 @@ require (
 	github.com/golang/protobuf v1.5.4 // indirect
 	go.etcd.io/etcd/api/v3 v3.5.17 // indirect
 	go.etcd.io/etcd/client/pkg/v3 v3.5.17 // indirect
-	go.etcd.io/etcd/client/v3 v3.5.17 // indirect
 	go.uber.org/atomic v1.7.0 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
 	go.uber.org/zap v1.17.0 // indirect
@@ -23,3 +26,5 @@ require (
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20230822172742-b8732ec3820d // indirect
 	google.golang.org/grpc v1.59.0 // indirect
 )
+
+replace github.com/alex-dev-master/protoc-gen-etcd/pkg/proto => ../
