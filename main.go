@@ -15,7 +15,7 @@ func main() {
 				continue
 			}
 
-			g := plugin.NewGeneratedFile(file.GeneratedFilenamePrefix+".etcd.go", "./example/proto")
+			g := plugin.NewGeneratedFile(file.GeneratedFilenamePrefix+".etcd.go", file.GoImportPath)
 			generateHeader(g, file)
 
 			for _, message := range file.Messages {
