@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package proto;
+
+import "github.com/alex-dev-master/protoc-gen-etcd/pkg/proto/options.proto";  // Подключаем файл с кастомными опциями
+
+option go_package = "github.com/alex-dev-master/example-gen-etcd/proto;proto";
+
+message User {
+  option (etcd_key_forms) = "/users/{id}";
+
+  int32 id = 1;
+  string name = 2;
+}
