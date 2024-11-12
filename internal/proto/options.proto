@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package proto;
+
+import "google/protobuf/descriptor.proto";
+
+option go_package = "github.com/alex-dev-master/protoc-gen-etcd/internal/proto;proto";
+
+// Расширения для хранения etcd ключей
+extend google.protobuf.MessageOptions {
+  string etcd_key_forms = 50001;  // Основной ключ etcd для сервиса forms
+}
