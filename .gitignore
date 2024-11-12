@@ -2,3 +2,4 @@
 /vendor/
 /example/vendor/
 /example/.idea/
+protoc-gen-etcd
