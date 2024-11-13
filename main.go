@@ -1,15 +1,54 @@
 package main
 
 import (
+	"flag"
 	ipb "github.com/alex-dev-master/protoc-gen-etcd/pkg/proto"
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/descriptorpb"
 	"log"
+	"log/slog"
+	"os"
+)
+
+var flags flag.FlagSet
+
+type (
+	Config struct {
+		LogLevelDebug *bool
+	}
 )
 
 func main() {
-	protogen.Options{}.Run(func(plugin *protogen.Plugin) error {
+	cfg := Config{
+		LogLevelDebug: flags.Bool("logLevelDebug", false, "enable debug log level"),
+	}
+
+	opts := protogen.Options{
+		ParamFunc: flags.Set,
+	}
+
+	opts.Run(func(plugin *protogen.Plugin) error {
+		logLevel := slog.LevelInfo
+		if *cfg.LogLevelDebug {
+			logLevel = slog.LevelDebug
+		}
+
+		textHandler := slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{
+			AddSource: false,
+			Level:     logLevel,
+			ReplaceAttr: func(groups []string, a slog.Attr) slog.Attr {
+				if a.Key == slog.TimeKey {
+					return slog.Attr{}
+				}
+				return a
+			},
+		})
+		slog.SetDefault(slog.New(textHandler))
+
+		slog.Info("Protogen plugin called with following files to be generated", "files", plugin.Request.FileToGenerate)
+		slog.Debug("Protogen plugin called with following files to be generated", "files", plugin.Request.FileToGenerate)
+
 		for _, file := range plugin.Files {
 			if !file.Generate {
 				continue
@@ -112,8 +151,8 @@ func generateEtcdServer(g *protogen.GeneratedFile, message *protogen.Message, et
 // getEtcdKeyTemplate получает значение etcd_key_template из опции сообщения
 func getEtcdKeyTemplate(message *protogen.Message) string {
 	opts := message.Desc.Options().(*descriptorpb.MessageOptions)
-	if proto.HasExtension(opts, ipb.E_EtcdKeyForms) {
-		keyTemplate := proto.GetExtension(opts, ipb.E_EtcdKeyForms).(string)
+	if proto.HasExtension(opts, ipb.E_EtcdKeyParams) {
+		keyTemplate := proto.GetExtension(opts, ipb.E_EtcdKeyParams).(string)
 		return keyTemplate
 	}
 	return ""
