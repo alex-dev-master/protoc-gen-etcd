@@ -8,12 +8,11 @@ option go_package = "github.com/alex-dev-master/protoc-gen-etcd/pkg/proto;proto"
 
 extend google.protobuf.MessageOptions {
   EtcdKeyOptions etcd_key_options = 50001;
-  EtcdValueOptions etcd_value_options = 50002;
-
 }
 
 extend google.protobuf.FieldOptions {
   EtcdKeyParamOptions etcd_key_param_options = 60001;
+  EtcdValueOptions etcd_value_options = 60002;
 }
 
 message EtcdKeyOptions {

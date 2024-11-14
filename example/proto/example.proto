@@ -6,18 +6,12 @@ import "github.com/alex-dev-master/protoc-gen-etcd/pkg/proto/options.proto";  //
 
 option go_package = "github.com/alex-dev-master/protoc-gen-etcd/example/proto;proto";
 
-message Currencies {
-  option (etcd_key_params) = {
-    keyPath: "/forms/{psCode}/{operationType}/currencies"
-  };
-  string psCode = 1;
-  string type = 2;
-}
-
-message Limits {
-  option (etcd_key_params) = {
+message LimitsKey {
+  option (etcd_key_options) = {
     keyPath: "/forms/{psCode}/{operationType}/limits"
   };
-  string psCode = 1 [(etcd_key_params) = "psCode"];
-  string type = 2;
+  string psCode = 1 [(etcd_key_param_options) = {isParam:true}];
+  string type = 2  [(etcd_key_param_options) = {isParam:true, targetName:"operationType"}];
+
+
 }
