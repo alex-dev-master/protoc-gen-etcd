@@ -1,6 +1,10 @@
 github.com/alex-dev-master/protoc-gen-etcd v0.0.0-20241113102926-8f562cf4b19c h1:C5apz8j/X5naUPgbdAmP5GBLpGbD1BUmJjGuZp5MwXk=
 github.com/alex-dev-master/protoc-gen-etcd v0.0.0-20241113102926-8f562cf4b19c/go.mod h1:dMxnj1nJsaiyVLwleD7GgtHjZJg5N2kESjVqunoT8Sg=
+github.com/alex-dev-master/protoc-gen-etcd v0.0.0-20241114144525-8628fda2361d h1:vc2Mt85ro9/OhNhkrYDRBch0BkB5rJzWhxhCg2TydUY=
+github.com/alex-dev-master/protoc-gen-etcd v0.0.0-20241114144525-8628fda2361d/go.mod h1:NgyEt/ne4y3LtWOLpRhBA7mjgbBco0YtOEqrPQ7Ap9E=
 github.com/google/go-cmp v0.5.9 h1:O2Tfq5qg4qc4AmwVlvv0oLiVAGB7enBSJ2x2DqQFi38=
 github.com/google/go-cmp v0.5.9/go.mod h1:17dUlkBOakJ0+DkrSSNjCkIjxS6bF9zb3elmeNGIjoY=
+github.com/iancoleman/strcase v0.3.0 h1:nTXanmYxhfFAMjZL34Ov6gkzEsSJZ5DbhxWjvSASxEI=
+github.com/iancoleman/strcase v0.3.0/go.mod h1:iwCmte+B7n89clKwxIoIXy/HfoL7AsD47ZCWhYzw7ho=
 google.golang.org/protobuf v1.35.1 h1:m3LfL6/Ca+fqnjnlqQXNpFPABW1UD7mjh8KO2mKFytA=
 google.golang.org/protobuf v1.35.1/go.mod h1:9fA7Ob0pmnwhb644+1+CVWFRbNajQ6iRojtC/QF5bRE=
