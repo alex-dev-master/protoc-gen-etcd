@@ -4,7 +4,7 @@ go 1.23.0
 
 require google.golang.org/protobuf v1.35.1 // indirect
 
-require github.com/alex-dev-master/protoc-gen-etcd v0.0.0-20241114155522-326e35486900
+require github.com/alex-dev-master/protoc-gen-etcd v0.0.0-20241114160028-98351058068d
 
 require (
 	github.com/google/go-cmp v0.5.9 // indirect

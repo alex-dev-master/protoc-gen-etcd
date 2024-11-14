@@ -12,6 +12,10 @@ message LimitsKey {
   };
   string psCode = 1 [(etcd_key_param_options) = {isParam:true}];
   string type = 2  [(etcd_key_param_options) = {isParam:true, targetName:"operationType"}];
+  CustomValBody value = 3 [(etcd_value_options) = {isValue:true}];
 
-
+  message CustomValBody {
+    int64 fieldInt = 1;
+    string fieldString = 2;
+  }
 }
