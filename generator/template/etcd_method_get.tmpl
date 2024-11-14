@@ -9,3 +9,5 @@ func (c *EtcdClient) Get(ctx context.Context, id string) (*User, error) {
 	}
 	return &User{ /* распарсить значение */ }, nil
 }
+
+{{ range $index, $element := .RequestParams.params }}{{ if $index}},{{end}}{{.$element }}{{end}}

@@ -10,20 +10,28 @@ import (
 	"strings"
 )
 
-type EtcdMetadata struct {
-	KeyPath string
-	Fields  map[string]*Field
-}
+type (
+	EtcdMetadata struct {
+		KeyPath       string
+		Fields        map[string]*Field
+		RequestParams *RequestParams
+	}
 
-type Field struct {
-	goName      string // name in go generated files
-	protoName   string // name in proto file
-	enumName    string
-	kind        protoreflect.Kind
-	cardinality protoreflect.Cardinality
-	optional    bool
-	goTypeStr   string
-}
+	Field struct {
+		goName      string // name in go generated files
+		protoName   string // name in proto file
+		enumName    string
+		kind        protoreflect.Kind
+		cardinality protoreflect.Cardinality
+		optional    bool
+		goTypeStr   string
+	}
+
+	RequestParams struct {
+		key    string
+		params []string
+	}
+)
 
 func (f *Field) getVariablePlaceholder() (string, error) {
 	switch f.kind {
@@ -56,12 +64,15 @@ func (f *Field) getVariablePlaceholder() (string, error) {
 func GetEtcdMetadataFromMessage(
 	message *protogen.Message,
 	etcdKeyParams *ipb.EtcdKeyParams,
-) (meta *EtcdMetadata) {
+) (meta *EtcdMetadata, err error) {
 	meta = &EtcdMetadata{
 		KeyPath: etcdKeyParams.GetKeyPath(),
 		Fields:  GetMethodFields(message),
 	}
-	return meta
+	if meta.RequestParams, err = getMethodRequestParams(meta); err != nil {
+		return nil, err
+	}
+	return meta, nil
 }
 
 func GetMethodFields(
@@ -116,21 +127,25 @@ func protoTypeToGoTypeField(fieldType protoreflect.Kind) string {
 	}
 }
 
-func (m *EtcdMetadata) getMethodRequestParams() (formatKey string, params []string, err error) {
+func getMethodRequestParams(m *EtcdMetadata) (_ *RequestParams, err error) {
 	var (
 		placeholder         string
 		keyParametersRegexp = regexp.MustCompile(`\{(\w+)\}`)
 	)
-	formatKey = m.KeyPath
+	formatKey := m.KeyPath
+	params := make([]string, 0, len(m.Fields))
 	for _, match := range keyParametersRegexp.FindAllStringSubmatch(m.KeyPath, -1) {
 		if f, ok := m.Fields[match[1]]; ok {
 			if placeholder, err = f.getVariablePlaceholder(); err != nil {
-				return "", nil, err
+				return nil, err
 			}
 			parameterName := strcase.ToLowerCamel(f.goName)
 			formatKey = strings.ReplaceAll(formatKey, match[0], placeholder)
 			params = append(params, fmt.Sprintf("%s %s", parameterName, f.goTypeStr))
 		}
 	}
-	return formatKey, params, nil
+	return &RequestParams{
+		key:    formatKey,
+		params: params,
+	}, nil
 }

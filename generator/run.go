@@ -46,7 +46,12 @@ func Run(cfg *entities.Config, plugin *protogen.Plugin) (err error) {
 			}
 			slog.Debug("etcdKeyParams", etcdKeyParams)
 
-			meta := GetEtcdMetadataFromMessage(message, etcdKeyParams)
+			var meta *EtcdMetadata
+			if meta, err = GetEtcdMetadataFromMessage(message, etcdKeyParams); err != nil {
+				slog.Debug("error GetEtcdMetadataFromMessage", etcdKeyParams)
+				return err
+			}
+
 			if err = GenerateEtcdClient(g, meta); err != nil {
 				slog.Debug("error GenerateEtcdClient", etcdKeyParams)
 				return err

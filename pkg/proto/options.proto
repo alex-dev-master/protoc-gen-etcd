@@ -6,15 +6,10 @@ import "google/protobuf/descriptor.proto";
 
 option go_package = "github.com/alex-dev-master/protoc-gen-etcd/pkg/proto;proto";
 
-/*extend google.protobuf.MessageOptions {
-  string etcd_key_forms = 50001;  // Основной ключ etcd для сервиса forms
-}*/
-
-
-extend google.protobuf.MessageOptions {
+extend google.protobuf.MethodOptions {
   EtcdKeyParams etcd_key_params = 50001;
 }
 
 message EtcdKeyParams {
-  string keyPath = 1;  // format 'user' or 'user.{id}'
+  string keyPath = 1;  // format '/user' or '/user/{id}'
 }

@@ -21,8 +21,6 @@ func GenerateEtcdMethodGet(
 		return err
 	}
 
-	meta.getMethodRequestParams()
-
 	genRes, err := GenerateTemplateFile(meta, t)
 	if err != nil {
 		slog.Debug("error GenerateTemplateFile", err)

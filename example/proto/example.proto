@@ -6,9 +6,17 @@ import "github.com/alex-dev-master/protoc-gen-etcd/pkg/proto/options.proto";  //
 
 option go_package = "github.com/alex-dev-master/protoc-gen-etcd/example/proto;proto";
 
+service ServiceName {
+  rpc Imports (somepackage.someCustomMsg1) returns (somepackage.someCustomMsg2) {
+    option (etcd_key_params) = {
+      keyPath: "/forms/{psCode}/{operationType}/currencies"
+    };
+  }
+}
+
 message Currencies {
   option (etcd_key_params) = {
-    keyPath: "/forms/{psCode}/{type}/currencies"
+    keyPath: "/forms/{psCode}/{operationType}/currencies"
   };
   string psCode = 1;
   string type = 2;
