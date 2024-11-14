@@ -4,15 +4,12 @@ package proto;
 
 import "github.com/alex-dev-master/protoc-gen-etcd/pkg/proto/options.proto";  // Подключаем файл с кастомными опциями
 
-option go_package = "github.com/alex-dev-master/example-gen-etcd/proto;proto";
+option go_package = "github.com/alex-dev-master/protoc-gen-etcd/example/proto;proto";
 
-message User {
-//  option (etcd_key_forms) = "/users/{id}";
-
+message Currencies {
   option (etcd_key_params) = {
-    keyPath: "/users/{id}"
+    keyPath: "/forms/{psCode}/{type}/currencies"
   };
-
-  int32 id = 1;
-  string name = 2;
+  string psCode = 1;
+  string type = 2;
 }

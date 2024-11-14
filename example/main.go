@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/alex-dev-master/protoc-gen-etcd/example/proto"
 )
 
 func main() {
