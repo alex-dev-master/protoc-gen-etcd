@@ -7,9 +7,18 @@ import "google/protobuf/descriptor.proto";
 option go_package = "github.com/alex-dev-master/protoc-gen-etcd/pkg/proto;proto";
 
 extend google.protobuf.MessageOptions {
-  EtcdKeyParams etcd_key_params = 50001;
+  EtcdKeyOptions etcd_key_options = 50001;
 }
 
-message EtcdKeyParams {
+extend google.protobuf.FieldOptions {
+  EtcdKeyParamOptions etcd_key_param_options = 60001;
+}
+
+message EtcdKeyOptions {
   string keyPath = 1;  // format '/user' or '/user/{id}'
+}
+
+message EtcdKeyParamOptions {
+  bool isParam = 1;
+  string targetName = 2;
 }

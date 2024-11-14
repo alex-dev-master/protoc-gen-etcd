@@ -13,3 +13,11 @@ message Currencies {
   string psCode = 1;
   string type = 2;
 }
+
+message Limits {
+  option (etcd_key_params) = {
+    keyPath: "/forms/{psCode}/{operationType}/limits"
+  };
+  string psCode = 1 [(etcd_key_params) = "psCode"];
+  string type = 2;
+}
