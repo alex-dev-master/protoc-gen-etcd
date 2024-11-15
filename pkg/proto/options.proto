@@ -6,6 +6,10 @@ import "google/protobuf/descriptor.proto";
 
 option go_package = "github.com/alex-dev-master/protoc-gen-etcd/pkg/proto;proto";
 
+extend google.protobuf.ServiceOptions {
+  EtcdOptions etcd_options = 50001;
+}
+
 extend google.protobuf.MessageOptions {
   EtcdKeyOptions etcd_key_options = 50001;
 }
@@ -15,8 +19,20 @@ extend google.protobuf.FieldOptions {
   EtcdValueOptions etcd_value_options = 60002;
 }
 
+// -------------------------------------------------------------
+// Messages
+
+message EtcdOptions {
+  bool mTLS = 1;
+  string serviceKeyPrefix = 2;
+}
+
 message EtcdKeyOptions {
   string keyPath = 1;  // format '/user' or '/user/{id}'
+  bool getMethod = 2;
+  bool putMethod = 3;
+  bool deleteMethod = 4;
+  bool watchMethod = 5;
 }
 
 message EtcdKeyParamOptions {

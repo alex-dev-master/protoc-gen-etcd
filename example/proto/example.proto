@@ -6,16 +6,33 @@ import "github.com/alex-dev-master/protoc-gen-etcd/pkg/proto/options.proto";  //
 
 option go_package = "github.com/alex-dev-master/protoc-gen-etcd/example/proto;proto";
 
-message LimitsKey {
-  option (etcd_key_options) = {
-    keyPath: "/forms/{psCode}/{operationType}/limits"
+service FormsEtcd {
+  option (etcd_options) = {
+    mTLS: true
+    serviceKeyPrefix: "/forms"
   };
+
+  rpc LimitsKey(LimitsKeyRequest) returns (LimitsValue){
+    option (etcd_key_options) = {
+      keyPath: "/config/{psCode}/{operationType}/limits",
+      getMethod: true,
+      putMethod: true,
+      deleteMethod: true,
+      watchMethod: true,
+    };
+  };
+}
+
+message LimitsKeyRequest {
   string psCode = 1 [(etcd_key_param_options) = {isParam:true}];
   string type = 2  [(etcd_key_param_options) = {isParam:true, targetName:"operationType"}];
-  CustomValBody value = 3 [(etcd_value_options) = {isValue:true}];
+}
 
-  message CustomValBody {
-    int64 fieldInt = 1;
-    string fieldString = 2;
-  }
+message LimitsValue {
+  LimitsValueBody val = 1 [(etcd_value_options) = {isValue:true}];
+}
+
+message LimitsValueBody {
+  int64 min = 1;
+  int64 max = 2;
 }
