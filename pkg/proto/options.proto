@@ -24,7 +24,8 @@ extend google.protobuf.FieldOptions {
 
 message EtcdOptions {
   bool mTLS = 1;
-  string serviceKeyPrefix = 2;
+  bool authByUserName = 2;
+  string serviceKeyPrefix = 3;
 }
 
 message EtcdKeyOptions {
