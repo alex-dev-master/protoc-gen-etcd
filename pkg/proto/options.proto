@@ -10,13 +10,13 @@ extend google.protobuf.ServiceOptions {
   EtcdOptions etcd_options = 50001;
 }
 
-extend google.protobuf.MessageOptions {
+extend google.protobuf.MethodOptions {
   EtcdKeyOptions etcd_key_options = 50001;
 }
 
 extend google.protobuf.FieldOptions {
-  EtcdKeyParamOptions etcd_key_param_options = 60001;
-  EtcdValueOptions etcd_value_options = 60002;
+  EtcdKeyParamOptions etcd_key_param_options = 50001;
+  EtcdValueOptions etcd_value_options = 50002;
 }
 
 // -------------------------------------------------------------
