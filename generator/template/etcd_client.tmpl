@@ -2,6 +2,11 @@ const (
     serviceNamePrefix = "{{.KeyPrefix}}"
 )
 
+var (
+    ErrorClientEmptyConfig = {{$.Imports.errors "New"}}("empty config")
+    ErrorKeyNotFound = {{$.Imports.errors "New"}}("key not found")
+)
+
 // EtcdClient предоставляет методы для работы с etcd
 type EtcdClient struct {
 	client *{{$.Imports.clientv3.Ident "Client"}}
@@ -9,14 +14,14 @@ type EtcdClient struct {
 
 type EtcdConfig struct {
     Endpoints []string
-    DialTimeout int64
+    DialTimeout {{$.Imports.time "Duration"}}
     Username string
     Password string
 }
 
 func NewEtcdClient(cfg *EtcdConfig) (*EtcdClient, error) {
     if cfg == nil {
-        return fmt.Errorf("empty config")
+        return nil, ErrorClientEmptyConfig
     }
 
 	cli, err := {{$.Imports.clientv3.Ident "New"}}({{$.Imports.clientv3.Ident "Config"}}{

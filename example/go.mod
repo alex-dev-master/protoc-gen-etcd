@@ -5,7 +5,7 @@ go 1.23.0
 require google.golang.org/protobuf v1.35.1
 
 require (
-	github.com/alex-dev-master/protoc-gen-etcd v0.0.0-20241118161636-3918582ba824
+	github.com/alex-dev-master/protoc-gen-etcd v0.0.0-20241118162019-4699230abe6d
 	go.etcd.io/etcd/client/v3 v3.5.17
 )
 

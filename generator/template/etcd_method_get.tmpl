@@ -1,11 +1,11 @@
 func (c *EtcdClient) Get{{.MethodName}}(ctx {{$.Imports.context.Ident "Context"}}, rq *{{.InputRequest.GoName}}) (resp *{{.ValueOfKey.GoName}}, err error) {
 	key := {{.KeyPathComplex}}
-	resp, err := c.client.Get(ctx, key)
+	respEtcd, err = c.client.Get(ctx, key)
 	if err != nil {
 		return nil, err
 	}
 
-	for _, v := range resp.Kvs {
+	for _, v := range respEtcd.Kvs {
 		err = json.Unmarshal(v.Value, resp)
 		if err != nil {
 			return nil, err
@@ -13,5 +13,5 @@ func (c *EtcdClient) Get{{.MethodName}}(ctx {{$.Imports.context.Ident "Context"}
 		return resp, nil
 	}
 
-	return nil, fmt.Errorf("key not found")
+	return nil, ErrorKeyNotFound
 }
