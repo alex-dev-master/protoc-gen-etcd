@@ -18,6 +18,8 @@ github.com/alex-dev-master/protoc-gen-etcd v0.0.0-20241118121956-480e6aef8fce h1
 github.com/alex-dev-master/protoc-gen-etcd v0.0.0-20241118121956-480e6aef8fce/go.mod h1:NgyEt/ne4y3LtWOLpRhBA7mjgbBco0YtOEqrPQ7Ap9E=
 github.com/alex-dev-master/protoc-gen-etcd v0.0.0-20241118125410-c7c784c977ae h1:DDscuq6myaJpKImSsAdm1tXadmqatv8VmhYmqrkAGdc=
 github.com/alex-dev-master/protoc-gen-etcd v0.0.0-20241118125410-c7c784c977ae/go.mod h1:NgyEt/ne4y3LtWOLpRhBA7mjgbBco0YtOEqrPQ7Ap9E=
+github.com/alex-dev-master/protoc-gen-etcd v0.0.0-20241118130741-1a6191b31d3d h1:nmQ4PzxsAqWx1tmH/VOSKN9Lvgu4Q5wKsIdRmqEH4oI=
+github.com/alex-dev-master/protoc-gen-etcd v0.0.0-20241118130741-1a6191b31d3d/go.mod h1:NgyEt/ne4y3LtWOLpRhBA7mjgbBco0YtOEqrPQ7Ap9E=
 github.com/google/go-cmp v0.5.9 h1:O2Tfq5qg4qc4AmwVlvv0oLiVAGB7enBSJ2x2DqQFi38=
 github.com/google/go-cmp v0.5.9/go.mod h1:17dUlkBOakJ0+DkrSSNjCkIjxS6bF9zb3elmeNGIjoY=
 github.com/iancoleman/strcase v0.3.0 h1:nTXanmYxhfFAMjZL34Ov6gkzEsSJZ5DbhxWjvSASxEI=
