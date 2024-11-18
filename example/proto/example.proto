@@ -8,8 +8,6 @@ option go_package = "github.com/alex-dev-master/protoc-gen-etcd/example/proto;pr
 
 service FormsEtcd {
   option (etcd_options) = {
-    mTLS: true
-    authByUserName: true
     serviceKeyPrefix: "/forms"
   };
 

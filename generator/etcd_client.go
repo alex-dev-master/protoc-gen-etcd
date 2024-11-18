@@ -4,6 +4,7 @@ import (
 	"bytes"
 	_ "embed"
 	"fmt"
+	"github.com/alex-dev-master/protoc-gen-etcd/generator/metadata"
 	"google.golang.org/protobuf/compiler/protogen"
 	"log/slog"
 	"text/template"
@@ -15,7 +16,7 @@ var etcdClientTmpl string
 // GenerateEtcdClient генерирует код клиента etcd
 func GenerateEtcdClient(
 	g *protogen.GeneratedFile,
-	meta *EtcdMetadata,
+	meta *metadata.EtcdClientMetadata,
 ) (err error) {
 	t, err := template.New("etcd-client").Parse(etcdClientTmpl)
 	if err != nil {
@@ -38,7 +39,7 @@ func GenerateEtcdClient(
 }
 
 func GenerateTemplateFile(
-	meta *EtcdMetadata,
+	meta *metadata.EtcdClientMetadata,
 	template *template.Template,
 ) ([]byte, error) {
 	var buf bytes.Buffer

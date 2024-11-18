@@ -1,11 +1,10 @@
 package generator
 
 import (
+	"errors"
 	"github.com/alex-dev-master/protoc-gen-etcd/entities"
-	ipb "github.com/alex-dev-master/protoc-gen-etcd/pkg/proto"
+	"github.com/alex-dev-master/protoc-gen-etcd/generator/extensions"
 	"google.golang.org/protobuf/compiler/protogen"
-	"google.golang.org/protobuf/proto"
-	"google.golang.org/protobuf/types/descriptorpb"
 	"log/slog"
 	"os"
 )
@@ -16,7 +15,7 @@ func Run(cfg *entities.Config, plugin *protogen.Plugin) (err error) {
 		logLevel = slog.LevelDebug
 	}
 
-	textHandler := slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{
+	lTextHandler := slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{
 		AddSource: false,
 		Level:     logLevel,
 		ReplaceAttr: func(groups []string, a slog.Attr) slog.Attr {
@@ -26,7 +25,7 @@ func Run(cfg *entities.Config, plugin *protogen.Plugin) (err error) {
 			return a
 		},
 	})
-	slog.SetDefault(slog.New(textHandler))
+	slog.SetDefault(slog.New(lTextHandler))
 
 	slog.Debug("Protogen plugin called with following files to be generated", "files", plugin.Request.FileToGenerate)
 
@@ -38,40 +37,23 @@ func Run(cfg *entities.Config, plugin *protogen.Plugin) (err error) {
 		g := plugin.NewGeneratedFile(file.GeneratedFilenamePrefix+".etcd.go", file.GoImportPath)
 		GenerateHeader(g, file)
 
-		for _, message := range file.Messages {
-			etcdKeyParams := getEtcdKeyParamsParams(message)
-			if etcdKeyParams == nil {
-				slog.Debug("Пропущено сообщение %s, так как etcd_key_template не задано\n", message.GoIdent.GoName)
-				continue
+		for _, service := range file.Services {
+			etcdOpts := extensions.GetEtcdOptions(service)
+			if etcdOpts == nil {
+				return errors.New("error getEtcdOptions")
 			}
-			slog.Debug("etcdKeyParams", etcdKeyParams)
-
-			var meta *EtcdMetadata
-			if meta, err = GetEtcdMetadataFromMessage(message, etcdKeyParams); err != nil {
-				slog.Debug("error GetEtcdMetadataFromMessage", etcdKeyParams)
+			if err = processServiceLayer(g, etcdOpts); err != nil {
+				slog.Debug("error processServiceLayer")
 				return err
 			}
 
-			if err = GenerateEtcdClient(g, meta); err != nil {
-				slog.Debug("error GenerateEtcdClient", etcdKeyParams)
-				return err
-			}
-
-			if err = GenerateEtcdMethodGet(g, meta); err != nil {
-				slog.Debug("error GenerateEtcdMethodGet", etcdKeyParams)
-				return err
+			for _, method := range service.Methods {
+				if err = processMethodLayer(g, method); err != nil {
+					slog.Debug("error processMethodLayer")
+					return err
+				}
 			}
 		}
-	}
-	return nil
-}
-
-// getEtcdKeyParamsParams получает структуру etcd_key_params из опции сообщения
-func getEtcdKeyParamsParams(message *protogen.Message) *ipb.EtcdKeyParams {
-	opts := message.Desc.Options().(*descriptorpb.MessageOptions)
-	if proto.HasExtension(opts, ipb.E_EtcdKeyParams) {
-		keyTemplate := proto.GetExtension(opts, ipb.E_EtcdKeyParams).(*ipb.EtcdKeyParams)
-		return keyTemplate
 	}
 	return nil
 }

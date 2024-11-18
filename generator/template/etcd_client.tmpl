@@ -1,3 +1,7 @@
+const (
+    serviceNamePrefix = {{.KeyPrefix}}
+)
+
 // EtcdClient предоставляет методы для работы с etcd
 type EtcdClient struct {
 	client *clientv3.Client
@@ -5,8 +9,9 @@ type EtcdClient struct {
 
 type EtcdConfig struct {
     Endpoints []string
-    ServiceNamePrefix string
     DialTimeout int64
+    Username string
+    Password string
 }
 
 func NewEtcdClient(cfg *EtcdConfig) (*EtcdClient, error) {
@@ -17,6 +22,8 @@ func NewEtcdClient(cfg *EtcdConfig) (*EtcdClient, error) {
 	cli, err := clientv3.New(clientv3.Config{
 		Endpoints:   cfg.Endpoints,
 		DialTimeout: cfg.DialTimeout,
+		Username:    cfg.Username,
+        Password:    cfg.Password,
 	})
 	if err != nil {
 		return nil, err
