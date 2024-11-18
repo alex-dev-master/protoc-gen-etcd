@@ -20,9 +20,10 @@ func GenerateEtcdMethodGet(
 			return err
 		}
 	}
+	keyPath = meta.KeyPrefix + keyPath
 
 	g.P()
-	g.P(`func (c *EtcdClient) Get(ctx `, contextPackage.Ident("Context"), `, rq *`, meta.InputRequest, `) (resp *`, meta.ValueOfKey, `, err error) {`)
+	g.P(`func (c *EtcdClient) Get`, meta.MethodName, `(ctx `, contextPackage.Ident("Context"), `, rq *`, meta.InputRequest, `) (resp *`, meta.ValueOfKey, `, err error) {`)
 	keyStr := `	key := ` + keyPath
 	if len(params) > 0 {
 		keyStr = fmt.Sprintf(`	key := fmt.Sprintf("%s", %s)`, keyPath, strings.Join(params, ", "))
@@ -32,6 +33,7 @@ func GenerateEtcdMethodGet(
 	g.P(`	if err != nil {
 		return nil, err
 	}
+
 	if len(resp.Kvs) == 0 {
 		return nil, fmt.Errorf("key not found")
 	}

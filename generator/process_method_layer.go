@@ -1,22 +1,18 @@
 package generator
 
 import (
-	"errors"
 	"github.com/alex-dev-master/protoc-gen-etcd/generator/extensions"
 	"github.com/alex-dev-master/protoc-gen-etcd/generator/metadata"
 	ipb "github.com/alex-dev-master/protoc-gen-etcd/pkg/proto"
 	"google.golang.org/protobuf/compiler/protogen"
-	"google.golang.org/protobuf/proto"
-	"google.golang.org/protobuf/types/descriptorpb"
 	"log/slog"
 )
 
-func processMethodLayer(g *protogen.GeneratedFile, method *protogen.Method) (err error) {
-	opts := method.Desc.Options().(*descriptorpb.MethodOptions)
-	if !proto.HasExtension(opts, ipb.E_EtcdKeyOptions) {
-		return errors.New("etcd_key_options extension missing")
+func processMethodLayer(g *protogen.GeneratedFile, method *protogen.Method, keyPrefix string) (err error) {
+	var etcdKeyOptions *ipb.EtcdKeyOptions
+	if etcdKeyOptions, err = extensions.GetEtcdKeyOptions(method); err != nil {
+		return err
 	}
-	etcdKeyOptions := proto.GetExtension(opts, ipb.E_EtcdKeyOptions).(*ipb.EtcdKeyOptions)
 
 	etcdKeyParamOptions := make(map[string]*metadata.FieldWithEtcdKeyParamOptions)
 	for _, fieldInput := range method.Input.Fields {
@@ -46,7 +42,9 @@ func processMethodLayer(g *protogen.GeneratedFile, method *protogen.Method) (err
 		etcdKeyOptions,
 		etcdKeyParamOptions,
 		method.Output.GoIdent,
-		method.Input.GoIdent)
+		method.Input.GoIdent,
+		keyPrefix,
+		method.GoName)
 
 	if err = GenerateEtcdMethodGet(g, etcdMethodMetadata); err != nil {
 		return err

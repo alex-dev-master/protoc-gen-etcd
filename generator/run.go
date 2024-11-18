@@ -48,7 +48,7 @@ func Run(cfg *entities.Config, plugin *protogen.Plugin) (err error) {
 			}
 
 			for _, method := range service.Methods {
-				if err = processMethodLayer(g, method); err != nil {
+				if err = processMethodLayer(g, method, etcdOpts.GetServiceKeyPrefix()); err != nil {
 					slog.Debug("error processMethodLayer")
 					return err
 				}

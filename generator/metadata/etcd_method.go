@@ -14,6 +14,8 @@ type EtcdMethodMetadata struct {
 	EtcdKeyParamOptions map[string]*FieldWithEtcdKeyParamOptions
 	ValueOfKey          protogen.GoIdent
 	InputRequest        protogen.GoIdent
+	KeyPrefix           string
+	MethodName          string
 }
 
 func NewEtcdMethodMetadata(
@@ -21,12 +23,16 @@ func NewEtcdMethodMetadata(
 	etcdKeyParamOptions map[string]*FieldWithEtcdKeyParamOptions,
 	valueOfKey protogen.GoIdent,
 	inputRequest protogen.GoIdent,
+	keyPrefix string,
+	methodName string,
 ) *EtcdMethodMetadata {
 	return &EtcdMethodMetadata{
 		EtcdKeyOptions:      etcdKeyOptions,
 		EtcdKeyParamOptions: etcdKeyParamOptions,
 		ValueOfKey:          valueOfKey,
 		InputRequest:        inputRequest,
+		KeyPrefix:           keyPrefix,
+		MethodName:          methodName,
 	}
 }
 
