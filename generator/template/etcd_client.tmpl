@@ -3,8 +3,8 @@ const (
 )
 
 var (
-    ErrorClientEmptyConfig = {{$.Imports.errors "New"}}("empty config")
-    ErrorKeyNotFound = {{$.Imports.errors "New"}}("key not found")
+    ErrorClientEmptyConfig = {{$.Imports.errors.Ident "New"}}("empty config")
+    ErrorKeyNotFound = {{$.Imports.errors.Ident "New"}}("key not found")
 )
 
 // EtcdClient предоставляет методы для работы с etcd
@@ -14,7 +14,7 @@ type EtcdClient struct {
 
 type EtcdConfig struct {
     Endpoints []string
-    DialTimeout {{$.Imports.time "Duration"}}
+    DialTimeout {{$.Imports.time.Ident "Duration"}}
     Username string
     Password string
 }
