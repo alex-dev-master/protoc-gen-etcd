@@ -9,31 +9,59 @@ import (
 	"strings"
 )
 
-type EtcdMethodMetadata struct {
-	EtcdKeyOptions      *ipb.EtcdKeyOptions
-	EtcdKeyParamOptions map[string]*FieldWithEtcdKeyParamOptions
-	ValueOfKey          protogen.GoIdent
-	InputRequest        protogen.GoIdent
-	KeyPrefix           string
-	MethodName          string
-}
+type (
+	EtcdMethodMetadata struct {
+		EtcdKeyOptions      *ipb.EtcdKeyOptions
+		EtcdKeyParamOptions map[string]*FieldWithEtcdKeyParamOptions
+		ValueOfKey          protogen.GoIdent
+		InputRequest        protogen.GoIdent
+		KeyPrefix           string
+		MethodName          string
+		Imports             map[string]*ImportResolver
+		KeyPath             string
+		KeyPathParams       []string
+		KeyPathComplex      string
+	}
+
+	NewEtcdMethodMetadataRequest struct {
+		EtcdKeyOptions      *ipb.EtcdKeyOptions
+		EtcdKeyParamOptions map[string]*FieldWithEtcdKeyParamOptions
+		ValueOfKey          protogen.GoIdent
+		InputRequest        protogen.GoIdent
+		KeyPrefix           string
+		MethodName          string
+		Imports             map[string]*ImportResolver
+	}
+)
 
 func NewEtcdMethodMetadata(
-	etcdKeyOptions *ipb.EtcdKeyOptions,
-	etcdKeyParamOptions map[string]*FieldWithEtcdKeyParamOptions,
-	valueOfKey protogen.GoIdent,
-	inputRequest protogen.GoIdent,
-	keyPrefix string,
-	methodName string,
-) *EtcdMethodMetadata {
-	return &EtcdMethodMetadata{
-		EtcdKeyOptions:      etcdKeyOptions,
-		EtcdKeyParamOptions: etcdKeyParamOptions,
-		ValueOfKey:          valueOfKey,
-		InputRequest:        inputRequest,
-		KeyPrefix:           keyPrefix,
-		MethodName:          methodName,
+	rq *NewEtcdMethodMetadataRequest,
+) (m *EtcdMethodMetadata, err error) {
+	m = &EtcdMethodMetadata{
+		EtcdKeyOptions:      rq.EtcdKeyOptions,
+		EtcdKeyParamOptions: rq.EtcdKeyParamOptions,
+		ValueOfKey:          rq.ValueOfKey,
+		InputRequest:        rq.InputRequest,
+		KeyPrefix:           rq.KeyPrefix,
+		MethodName:          rq.MethodName,
+		Imports:             rq.Imports,
 	}
+
+	keyPath := rq.EtcdKeyOptions.GetKeyPath()
+	params := make([]string, 0)
+	if len(rq.EtcdKeyParamOptions) > 0 {
+		if keyPath, params, err = m.GetMethodRequestParams(); err != nil {
+			return nil, err
+		}
+	}
+	m.KeyPath = m.KeyPrefix + keyPath
+	m.KeyPathParams = params
+
+	m.KeyPathComplex = m.KeyPath
+	if len(params) > 0 {
+		m.KeyPathComplex = fmt.Sprintf(`fmt.Sprintf("%s", %s)`, m.KeyPath, strings.Join(m.KeyPathParams, ", "))
+	}
+	return m, nil
 }
 
 type (

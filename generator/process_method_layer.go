@@ -8,7 +8,7 @@ import (
 	"log/slog"
 )
 
-func processMethodLayer(g *protogen.GeneratedFile, method *protogen.Method, keyPrefix string) (err error) {
+func (g *generator) processMethodLayer(genFile *protogen.GeneratedFile, method *protogen.Method, keyPrefix string) (err error) {
 	var etcdKeyOptions *ipb.EtcdKeyOptions
 	if etcdKeyOptions, err = extensions.GetEtcdKeyOptions(method); err != nil {
 		return err
@@ -38,15 +38,23 @@ func processMethodLayer(g *protogen.GeneratedFile, method *protogen.Method, keyP
 		etcdKeyParamOptions[key] = f
 	}
 
-	etcdMethodMetadata := metadata.NewEtcdMethodMetadata(
-		etcdKeyOptions,
-		etcdKeyParamOptions,
-		method.Output.GoIdent,
-		method.Input.GoIdent,
-		keyPrefix,
-		method.GoName)
+	var etcdMethodMetadata *metadata.EtcdMethodMetadata
+	if etcdMethodMetadata, err = metadata.NewEtcdMethodMetadata(
+		&metadata.NewEtcdMethodMetadataRequest{
+			EtcdKeyOptions:      etcdKeyOptions,
+			EtcdKeyParamOptions: etcdKeyParamOptions,
+			ValueOfKey:          method.Output.GoIdent,
+			InputRequest:        method.Input.GoIdent,
+			KeyPrefix:           keyPrefix,
+			MethodName:          method.GoName,
+			Imports:             g.imports,
+		},
+	); err != nil {
+		slog.Debug("error NewEtcdMethodMetadata")
+		return err
+	}
 
-	if err = GenerateEtcdMethodGet(g, etcdMethodMetadata); err != nil {
+	if err = GenerateEtcdMethodGet(genFile, etcdMethodMetadata); err != nil {
 		return err
 	}
 

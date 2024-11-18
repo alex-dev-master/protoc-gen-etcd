@@ -4,7 +4,7 @@ PWD := $(shell pwd)
 GOPATH := $(shell go env GOPATH)
 .PHONY: debug
 
-all: build 		## all commands
+all: build debug		## all commands
 
 build:      		## build
 	@printf "\033[32mBuilding...\033[0m\n"

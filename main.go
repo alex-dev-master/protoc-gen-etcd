@@ -17,7 +17,5 @@ func main() {
 	opts := protogen.Options{
 		ParamFunc: flags.Set,
 	}
-	opts.Run(func(plugin *protogen.Plugin) (err error) {
-		return generator.Run(cfg, plugin)
-	})
+	opts.Run(generator.NewGenerator(cfg).Run)
 }

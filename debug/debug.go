@@ -38,7 +38,7 @@ func run() error {
 	cfg := &entities.Config{
 		LogLevelDebug: ptr(true),
 	}
-	if err = generator.Run(cfg, gen); err != nil {
+	if err = generator.NewGenerator(cfg).Run(gen); err != nil {
 		return err
 	}
 	resp := gen.Response()

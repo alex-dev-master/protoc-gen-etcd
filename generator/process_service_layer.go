@@ -7,9 +7,15 @@ import (
 	"log/slog"
 )
 
-func processServiceLayer(g *protogen.GeneratedFile, etcdOpts *ipb.EtcdOptions) (err error) {
-	etcdClientMetadata := metadata.NewEtcdClientMetadata(etcdOpts.GetServiceKeyPrefix())
-	if err = GenerateEtcdClient(g, etcdClientMetadata); err != nil {
+func (g *generator) processServiceLayer(
+	genFile *protogen.GeneratedFile,
+	etcdOpts *ipb.EtcdOptions,
+) (err error) {
+	etcdClientMetadata := metadata.NewEtcdClientMetadata(
+		etcdOpts.GetServiceKeyPrefix(),
+		g.imports,
+	)
+	if err = GenerateEtcdClient(genFile, etcdClientMetadata); err != nil {
 		slog.Debug("error GenerateEtcdClient")
 		return err
 	}

@@ -30,6 +30,7 @@ func GenerateEtcdClient(
 		return err
 	}
 
+	g.P()
 	_, err = g.Write(genRes)
 	if err != nil {
 		slog.Debug("error GenerateTemplateFile", err)
@@ -38,8 +39,8 @@ func GenerateEtcdClient(
 	return nil
 }
 
-func GenerateTemplateFile(
-	meta *metadata.EtcdClientMetadata,
+func GenerateTemplateFile[m any](
+	meta m,
 	template *template.Template,
 ) ([]byte, error) {
 	var buf bytes.Buffer
