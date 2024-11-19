@@ -3,7 +3,7 @@ package generator
 import (
 	"errors"
 	"github.com/alex-dev-master/protoc-gen-etcd/entities"
-	"github.com/alex-dev-master/protoc-gen-etcd/generator/extensions"
+	"github.com/alex-dev-master/protoc-gen-etcd/generator/extension"
 	"github.com/alex-dev-master/protoc-gen-etcd/generator/metadata"
 	"google.golang.org/protobuf/compiler/protogen"
 	"log/slog"
@@ -38,7 +38,7 @@ func (g *generator) Run(plugin *protogen.Plugin) (err error) {
 		GenerateHeader(genFile, file)
 
 		for _, service := range file.Services {
-			etcdOpts := extensions.GetEtcdOptions(service)
+			etcdOpts := extension.GetEtcdOptions(service)
 			if etcdOpts == nil {
 				return errors.New("error getEtcdOptions")
 			}

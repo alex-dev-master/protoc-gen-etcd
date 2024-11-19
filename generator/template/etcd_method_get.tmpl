@@ -1,4 +1,4 @@
-func (c *EtcdClient) Get{{.MethodName}}(ctx {{$.Imports.context.Ident "Context"}}, rq *{{.InputRequest.GoName}}) (resp *{{.ValueOfKey.GoName}}, err error) {
+func (c *EtcdClient) Get{{.MethodName}}(ctx {{$.Imports.context.Ident "Context"}}, rq *{{.InputRequest.GoName}}) (resp *{{.ValueType.GoName}}, err error) {
 	key := {{.KeyPathComplex}}
 	respEtcd, err := c.client.Get(ctx, key)
 	if err != nil {

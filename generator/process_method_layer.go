@@ -1,7 +1,7 @@
 package generator
 
 import (
-	"github.com/alex-dev-master/protoc-gen-etcd/generator/extensions"
+	"github.com/alex-dev-master/protoc-gen-etcd/generator/extension"
 	"github.com/alex-dev-master/protoc-gen-etcd/generator/metadata"
 	ipb "github.com/alex-dev-master/protoc-gen-etcd/pkg/proto"
 	"google.golang.org/protobuf/compiler/protogen"
@@ -10,13 +10,13 @@ import (
 
 func (g *generator) processMethodLayer(genFile *protogen.GeneratedFile, method *protogen.Method, keyPrefix string) (err error) {
 	var etcdKeyOptions *ipb.EtcdKeyOptions
-	if etcdKeyOptions, err = extensions.GetEtcdKeyOptions(method); err != nil {
+	if etcdKeyOptions, err = extension.GetEtcdKeyOptions(method); err != nil {
 		return err
 	}
 
 	etcdKeyParamOptions := make(map[string]*metadata.FieldWithEtcdKeyParamOptions)
 	for _, fieldInput := range method.Input.Fields {
-		fieldInputOptsExt, errE := extensions.GetEtcdKeyParamOptions(fieldInput)
+		fieldInputOptsExt, errE := extension.GetEtcdKeyParamOptions(fieldInput)
 		if errE != nil {
 			slog.Debug(errE.Error())
 			continue
@@ -38,12 +38,26 @@ func (g *generator) processMethodLayer(genFile *protogen.GeneratedFile, method *
 		etcdKeyParamOptions[key] = f
 	}
 
+	var valueOfKeyMessage protogen.GoIdent
+	if len(method.Output.Fields) > 0 {
+		var ext *ipb.EtcdValueOptions
+		for _, field := range method.Output.Fields {
+			if ext, err = extension.GetEtcdValueOptions(field); err != nil {
+				continue
+			}
+			if ext.IsValue {
+				valueOfKeyMessage = field.Message.GoIdent
+				break
+			}
+		}
+	}
+
 	var etcdMethodMetadata *metadata.EtcdMethodMetadata
 	if etcdMethodMetadata, err = metadata.NewEtcdMethodMetadata(
 		&metadata.NewEtcdMethodMetadataRequest{
 			EtcdKeyOptions:      etcdKeyOptions,
 			EtcdKeyParamOptions: etcdKeyParamOptions,
-			ValueOfKey:          method.Output.GoIdent,
+			ValueType:           valueOfKeyMessage,
 			InputRequest:        method.Input.GoIdent,
 			KeyPrefix:           keyPrefix,
 			MethodName:          method.GoName,

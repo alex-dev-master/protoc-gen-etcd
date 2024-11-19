@@ -1,4 +1,4 @@
-package extensions
+package extension
 
 import (
 	ipb "github.com/alex-dev-master/protoc-gen-etcd/pkg/proto"

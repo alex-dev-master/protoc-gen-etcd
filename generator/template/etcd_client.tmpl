@@ -17,6 +17,7 @@ type EtcdConfig struct {
     DialTimeout {{$.Imports.time.Ident "Duration"}}
     Username string
     Password string
+    TLSInfo *{{$.Imports.transport.Ident "TLSInfo"}}
 }
 
 func NewEtcdClient(cfg *EtcdConfig) (*EtcdClient, error) {
@@ -24,11 +25,19 @@ func NewEtcdClient(cfg *EtcdConfig) (*EtcdClient, error) {
         return nil, ErrorClientEmptyConfig
     }
 
+    var tlsConfig *tls.Config
+    if tlsInfo != nil {
+        if tlsConfig, err = tlsInfo.ClientConfig(); err != nil {
+            return nil, err
+        }
+    }
+
 	cli, err := {{$.Imports.clientv3.Ident "New"}}({{$.Imports.clientv3.Ident "Config"}}{
 		Endpoints:   cfg.Endpoints,
 		DialTimeout: cfg.DialTimeout,
 		Username:    cfg.Username,
         Password:    cfg.Password,
+        TLSInfo:     tlsConfig,
 	})
 	if err != nil {
 		return nil, err
